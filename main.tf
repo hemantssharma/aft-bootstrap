@@ -15,7 +15,7 @@ provider "aws" {
  
 module "aft" {
   source  = "aws-ia/control_tower_account_factory/aws"
-  version = "1.10.0" # upgrade to latest
+  version = "1.10.1" # upgrade to latest
  
   # Required inputs
   ct_management_account_id  = "767397915550"   # Control Tower Mgmt
@@ -33,7 +33,4 @@ module "aft" {
   account_customizations_repo_name            = "hemantssharma/aft-account-customizations"
   account_provisioning_customizations_repo_name = "hemantssharma/aft-provisioning-customizations"
  
-  # Workaround for new S3 defaults (skip ACL enforcement)
-  s3_bucket_force_destroy = true
-  aft_s3_access_logging   = false
 }
