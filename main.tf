@@ -13,7 +13,8 @@ provider "aws" {
 }
 
 module "aft" {
-  source = "github.com/aws-ia/terraform-aws-control_tower_account_factory"
+  source  = "aws-ia/control_tower_account_factory/aws"
+  version = "1.7.0"   # 👈 always pin a version
 
   ct_management_account_id  = "767397915550"
   aft_management_account_id = "314431539167"
