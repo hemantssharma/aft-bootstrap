@@ -16,7 +16,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::383975042464:role/AFTGitHubRole
+          role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
           audience: sts.amazonaws.com
           aws-region: us-east-1
 
