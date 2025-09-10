@@ -30,6 +30,12 @@ jobs:
  
       - name: Terraform Init
         run: terraform init -reconfigure
+
+      - name: Import existing DynamoDB table
+        run: |
+          terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-314431539167
+        # ignore errors in case it’s already imported
+        continue-on-error: true
  
       - name: Terraform Validate
         run: terraform validate
