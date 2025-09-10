@@ -2,8 +2,9 @@ name: Deploy AFT Bootstrap
  
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+    paths:
+      - 'terraform/**.tf'
  
 permissions:
   id-token: write
