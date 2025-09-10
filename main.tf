@@ -14,11 +14,16 @@ provider "aws" {
 
 module "aft" {
   source  = "aws-ia/control_tower_account_factory/aws"
-  version = "1.7.0"   # 👈 always pin a version
+  version = "1.7.0"   # 👈 always pin a version 
 
-  ct_management_account_id  = "767397915550"
-  aft_management_account_id = "314431539167"
+  ct_management_account_id  = "767397915550"   # Control Tower Mgmt
+  aft_management_account_id = "314431539167"   # AFT Mgmt
   ct_home_region            = "us-east-1"
+
+  # 👇 Add these required variables
+  audit_account_id           = "753862336665"
+  log_archive_account_id     = "844840482771"
+  tf_backend_secondary_region = "us-west-2"   # or another CT-supported region
 
   vcs_provider                                = "github"
   account_request_repo_name                   = "hemantssharma/aft-account-request"
