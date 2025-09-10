@@ -13,12 +13,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_dynamodb_table_replica" "lock-table-replica" {
-  # ... config
- 
-  lifecycle {
-    ignore_changes = all
-  }
 }
  
 module "aft" {
