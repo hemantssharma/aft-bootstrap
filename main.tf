@@ -31,6 +31,7 @@ module "aft" {
   ct_home_region            = "us-east-1"
   audit_account_id            = "753862336665" # <--- replace with your real Audit account
   log_archive_account_id      = "844840482771" # <--- replace with your real Log Archive account
+  tf_backend_primary_region   = "us-west-1"    # <--- choose primary region for backend
   tf_backend_secondary_region = "us-west-2"    # <--- choose secondary region for backend
  
   # AFT repos (update with your GitHub org/user)
