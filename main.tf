@@ -13,7 +13,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-}
  
 module "aft" {
   source  = "aws-ia/control_tower_account_factory/aws"
