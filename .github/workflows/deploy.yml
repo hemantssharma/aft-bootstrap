@@ -1,36 +1,41 @@
 name: Deploy AFT Bootstrap
- 
+
 on:
   push:
     branches: [ "main" ]
     paths:
       - '**.tf'
- 
+
 permissions:
   id-token: write
   contents: read
- 
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
- 
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
- 
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
           aws-region: us-east-1
- 
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.5
- 
+
       - name: Terraform Init
         run: terraform init -reconfigure
+
+      # 👇 Force rebuild of AFT Account Request CodeBuild project
+      - name: Taint Account Request CodeBuild Project
+        run: |
+          terraform taint module.aft.module.aft_account_request.aws_codebuild_project.account_request || true
 
       - name: Import existing DynamoDB table
         run: terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-314431539167 || true
@@ -39,12 +44,12 @@ jobs:
         run: |
           terraform import module.aft.module.aft_iam_roles.module.ct_management_exec_role.aws_iam_role.role AWSAFTExecution || true
           terraform import module.aft.module.aft_iam_roles.module.ct_management_service_role.aws_iam_role.role AWSAFTService || true
- 
+
       - name: Terraform Validate
         run: terraform validate
- 
+
       - name: Terraform Plan
         run: terraform plan -out=tfplan
- 
+
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
