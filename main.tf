@@ -1,4 +1,4 @@
-# I hope this time it should work
+# I hope this time it should work.
 
 terraform {
   required_version = ">= 1.6.0"
