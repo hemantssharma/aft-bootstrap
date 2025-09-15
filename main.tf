@@ -21,11 +21,11 @@ module "aft" {
   version = "1.10.1" # upgrade to latest
  
   # Required inputs
-  ct_management_account_id  = "767397915550"   # Control Tower Mgmt
-  aft_management_account_id = "314431539167"   # AFT Mgmt
+  ct_management_account_id  = "429712912679"   # Control Tower Mgmt
+  aft_management_account_id = "803356297187"   # AFT Mgmt
   ct_home_region            = "us-east-1"
-  audit_account_id            = "753862336665" # <--- replace with your real Audit account
-  log_archive_account_id      = "844840482771" # <--- replace with your real Log Archive account
+  audit_account_id            = "096693758097" # <--- replace with your real Audit account
+  log_archive_account_id      = "395298787173" # <--- replace with your real Log Archive account
   tf_backend_secondary_region = "us-west-2"    # <--- choose secondary region for backend
  
   # AFT repos (update with your GitHub org/user)
