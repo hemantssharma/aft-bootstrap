@@ -21,7 +21,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
+          role-to-assume: arn:aws:iam::803356297187:role/AFTGitHubRole
           aws-region: us-east-1
 
       - name: Setup Terraform
@@ -60,7 +60,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
+          role-to-assume: arn:aws:iam::803356297187:role/AFTGitHubRole
           aws-region: us-east-1
 
       - name: Setup Terraform
