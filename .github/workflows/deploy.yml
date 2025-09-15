@@ -1,34 +1,34 @@
 name: Deploy AFT Bootstrap
-
+ 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - '**.tf'
-
+      - 'terraform/**.tf'
+ 
 permissions:
   id-token: write
   contents: read
-
+ 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-
+ 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+ 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::803356297187:role/AFTGitHubRole
           aws-region: us-east-1
-
+ 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.7.5
-
+ 
       - name: Terraform Init
         run: terraform init -reconfigure
 
@@ -39,39 +39,12 @@ jobs:
         run: |
           terraform import module.aft.module.aft_iam_roles.module.ct_management_exec_role.aws_iam_role.role AWSAFTExecution || true
           terraform import module.aft.module.aft_iam_roles.module.ct_management_service_role.aws_iam_role.role AWSAFTService || true
-
+ 
       - name: Terraform Validate
         run: terraform validate
-
+ 
       - name: Terraform Plan
         run: terraform plan -out=tfplan
-
+ 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
-
-  force-rebuild:
-    needs: terraform
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::803356297187:role/AFTGitHubRole
-          aws-region: us-east-1
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.7.5
-
-      - name: Terraform Init
-        run: terraform init -reconfigure
-
-      - name: Force taint and rebuild Account Request CodeBuild project
-        run: |
-          terraform taint module.aft.module.aft_account_request.aws_codebuild_project.account_request || true
-          terraform apply -auto-approve
