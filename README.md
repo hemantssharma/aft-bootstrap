@@ -23,15 +23,15 @@ terraform {
   required_version = ">= 1.6.0"
  
   backend "s3" {
-    bucket         = "my-terraform-state-bucket-aftbootstrap"
+    bucket         = "my-terraform-state-bucket-aftbootstraps"
     key            = "aft-bootstrap/terraform.tfstate"
-    region         = "us-east-1"
+    region         = "ap-south-1"
     dynamodb_table = "my-terraform-locks"
   }
 }
  
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-south-1"
 }
 
  
@@ -41,10 +41,10 @@ module "aft" {
  
   # Required inputs
   ct_management_account_id  = "767397915550"   # Control Tower Mgmt
-  aft_management_account_id = "314431539167"   # AFT Mgmt
-  ct_home_region            = "us-east-1"
-  audit_account_id            = "753862336665" # <--- replace with your real Audit account
-  log_archive_account_id      = "844840482771" # <--- replace with your real Log Archive account
+  aft_management_account_id = "319501696717"   # AFT Mgmt
+  ct_home_region            = "ap-south-1"
+  audit_account_id            = "096693758097" # <--- replace with your real Audit account
+  log_archive_account_id      = "395298787173" # <--- replace with your real Log Archive account
   tf_backend_secondary_region = "us-west-2"    # <--- choose secondary region for backend
  
   # AFT repos (update with your GitHub org/user)
@@ -84,8 +84,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
-          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::319501696717:role/AFTGitHubRole
+          aws-region: ap-south-1
  
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -96,7 +96,7 @@ jobs:
         run: terraform init -reconfigure
 
       - name: Import existing DynamoDB table
-        run: terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-314431539167 || true
+        run: terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-319501696717 || true
 
       - name: Import existing IAM Roles
         run: |
@@ -230,8 +230,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::314431539167:role/AFTGitHubRole
-          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::319501696717:role/AFTGitHubRole
+          aws-region: ap-south-1
       - uses: hashicorp/setup-terraform@v3
       - run: terraform init
       - run: terraform apply -auto-approve
@@ -308,7 +308,7 @@ Fork/create these repos in your GitHub org.
 Update:
  
 * `ct_management_account_id: 767397915550`
-* `aft_management_account_id: 314431539167`
+* `aft_management_account_id: 319501696717`
 * `your-github-user: hemantssharma` in repo names
 * OIDC IAM role ARNs
  
@@ -324,7 +324,7 @@ Then trigger `Deploy AFT` workflow in **`aft-bootstrap`** to wire everything tog
         {
             "Effect": "Allow",
             "Principal": {
-                "Federated": "arn:aws:iam::314431539167:oidc-provider/token.actions.githubusercontent.com"
+                "Federated": "arn:aws:iam::319501696717:oidc-provider/token.actions.githubusercontent.com"
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
