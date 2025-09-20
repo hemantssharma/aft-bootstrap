@@ -32,23 +32,26 @@ jobs:
       - name: Terraform Init
         run: terraform init -reconfigure
 
-      - name: Import existing resources (run only once)
+      - name: Import existing resources (safe to re-run)
         run: |
-          # DynamoDB lock table
+          set -e
+
+          echo "🔹 Importing DynamoDB lock table..."
           if ! terraform state show module.aft.module.aft_backend.aws_dynamodb_table.lock-table >/dev/null 2>&1; then
-            terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-319501696717-lock-table || true
+            terraform import module.aft.module.aft_backend.aws_dynamodb_table.lock-table aft-backend-319501696717 || true
           fi
 
-          # S3 backend bucket
+          echo "🔹 Importing S3 backend bucket..."
           if ! terraform state show module.aft.module.aft_backend.aws_s3_bucket.primary-backend-bucket >/dev/null 2>&1; then
-            terraform import module.aft.module.aft_backend.aws_s3_bucket.primary-backend-bucket aft-backend-319501696717-primary-region || true
+            terraform import module.aft.module.aft_backend.aws_s3_bucket.primary-backend-bucket aft-backend-319501696717 || true
           fi
 
-          # IAM Roles
+          echo "🔹 Importing AFT IAM Execution Role..."
           if ! terraform state show module.aft.module.aft_iam_roles.module.aft_exec_role.aws_iam_role.role >/dev/null 2>&1; then
             terraform import module.aft.module.aft_iam_roles.module.aft_exec_role.aws_iam_role.role AWSAFTExecution || true
           fi
 
+          echo "🔹 Importing AFT IAM Service Role..."
           if ! terraform state show module.aft.module.aft_iam_roles.module.aft_service_role.aws_iam_role.role >/dev/null 2>&1; then
             terraform import module.aft.module.aft_iam_roles.module.aft_service_role.aws_iam_role.role AWSAFTService || true
           fi
